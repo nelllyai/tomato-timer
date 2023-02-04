@@ -4,7 +4,7 @@ class Task {
   #counter;
 
   constructor (id, title, counter = 0) {
-    this.#id = id;
+    this.#id = Math.floor(Math.random() * 1000);
     this.#title = title;
     this.#counter = counter;
   }
