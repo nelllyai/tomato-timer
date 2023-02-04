@@ -3,7 +3,7 @@ class Task {
   #title;
   #counter;
 
-  constructor (id, title, counter = 0) {
+  constructor (title, counter = 0) {
     this.#id = Math.floor(Math.random() * 1000);
     this.#title = title;
     this.#counter = counter;
