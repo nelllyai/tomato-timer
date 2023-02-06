@@ -9,6 +9,14 @@ class Task {
     this.#counter = counter;
   }
 
+  get id() {
+    return this.#id;
+  }
+
+  get counter() {
+    return this.#counter;
+  }
+
   addCounter() {
     this.#counter++;
     return this;
@@ -19,3 +27,5 @@ class Task {
     return this;
   }
 };
+
+export default Task;
