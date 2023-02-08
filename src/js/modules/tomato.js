@@ -1,20 +1,35 @@
-class Tomato {
-  activeTask = null;
+import ControllerTomato from "./controllerTomato";
+import RenderTomato from "./renderTomato";
 
-  constructor({ time = 25, pause = 5, bigPause = 15, tasks = [] }) {
+class Tomato {
+  static instance = null;
+  #activeTask = null;
+
+  constructor({ time = 25, pause = 5, bigPause = 15, tasks = [] }, renderContainer = null) {
+    if (Tomato.instance) return Tomato.instance;
+
     this.time = time;
     this.pause = pause;
     this.bigPause = bigPause;
     this.tasks = tasks;
+    this.renderContainer = renderContainer;
+    Tomato.instance = this;
+    this.render();
+  }
+
+  get activeTask() {
+    return this.#activeTask;
   }
 
   addTask(task) {
     this.tasks.push(task);
+    this.renderTomato.renderQuestTasks();
     return this;
   }
 
   activateTask(id) {
-    this.activeTask = this.findTask(id);
+    this.#activeTask = this.findTask(id);
+    this.renderTomato.renderMainPanel();
     return this;
   }
 
@@ -24,14 +39,14 @@ class Tomato {
     const bigPauseTime = this.toMinutes(this.bigPause);
 
     try {
-      if (!this.activeTask) {
+      if (!this.#activeTask) {
         throw new Error('Нет активной задачи!');
       }
 
-      console.log('Активировали задачу #' + this.activeTask.id);
+      console.log('Активировали задачу #' + this.#activeTask.id);
 
       setTimeout(() => {
-        if (this.activeTask.counter % 3 === 0) {
+        if (this.#activeTask.counter % 3 === 0) {
           setTimeout(() => {
             console.log('Хорошо отдохнули!');
           }, bigPauseTime);
@@ -41,14 +56,22 @@ class Tomato {
           }, pauseTime);
         }
       }, taskTime);
-      this.addCounter(this.activeTask.id);
+      this.addCounter(this.#activeTask.id);
     } catch (err) {
       console.error(err.message);
     }
   }
 
+  render() {
+    if (this.renderContainer) {
+      this.renderTomato = new RenderTomato(this.renderContainer, this);
+      this.controllerTomato = new ControllerTomato(this, this.renderTomato.questTasks, this.renderTomato.taskForm);
+    }
+  }
+
   addCounter(id) {
     this.findTask(id).addCounter();
+    this.renderTomato.renderQuestTasks();
   }
 
   findTask(id) {

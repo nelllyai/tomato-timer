@@ -57,7 +57,11 @@ fieldset {
   width: 147px;
   height: 55px;
   border: 0;
+}
 
+.button:disabled {
+  background-color: $deadline-timer;
+  pointer-events: none;
 }
 
 .button-primary {
@@ -128,7 +132,7 @@ fieldset {
 .count-number {
   position: absolute;
   content: '';
-  left: 10px;
-  top: 20px;
+  left: 8px;
+  top: 19px;
   z-index: 1;
 }
